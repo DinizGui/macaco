@@ -21,9 +21,7 @@ export function MonkeyAnimation({ isThinking }: MonkeyAnimationProps) {
       .then((data) => {
         if (!cancelled) setAnimationData(data);
       })
-      .catch(() => {
-        /* fallback SVG monkey is shown */
-      });
+      .catch(() => {});
     return () => {
       cancelled = true;
     };
@@ -37,16 +35,20 @@ export function MonkeyAnimation({ isThinking }: MonkeyAnimationProps) {
 
   return (
     <div
-      className="relative mx-auto flex h-[300px] w-[300px] items-center justify-center"
+      className="relative mx-auto flex aspect-square w-full max-w-[320px] items-center justify-center"
       aria-label="Macaco"
     >
+      <div
+        className="absolute bottom-4 h-6 w-3/4 rounded-full bg-black/40 blur-xl"
+        aria-hidden
+      />
       {animationData ? (
         <Lottie
           lottieRef={lottieRef}
           animationData={animationData}
           loop
           autoplay
-          style={{ width: 300, height: 300 }}
+          style={{ width: "100%", height: "100%" }}
         />
       ) : (
         <SvgMonkey isThinking={isThinking} />
@@ -67,8 +69,8 @@ function SvgMonkey({ isThinking }: { isThinking: boolean }) {
       let t = 0;
       const tick = () => {
         t += 0.12;
-        const px = Math.cos(t) * 5;
-        const py = Math.sin(t * 1.3) * 4;
+        const px = Math.cos(t) * 4.5;
+        const py = Math.sin(t * 1.3) * 3.5;
         if (leftPupilRef.current) {
           leftPupilRef.current.style.transform = `translate(${px}px, ${py}px)`;
         }
@@ -94,7 +96,7 @@ function SvgMonkey({ isThinking }: { isThinking: boolean }) {
         const dx = event.clientX - cx;
         const dy = event.clientY - cy;
         const angle = Math.atan2(dy, dx);
-        const dist = Math.min(Math.hypot(dx, dy) / 18, 6);
+        const dist = Math.min(Math.hypot(dx, dy) / 22, 5);
         const px = Math.cos(angle) * dist;
         const py = Math.sin(angle) * dist;
         pupil.style.transform = `translate(${px}px, ${py}px)`;
@@ -112,81 +114,198 @@ function SvgMonkey({ isThinking }: { isThinking: boolean }) {
 
   return (
     <svg
-      viewBox="0 0 200 200"
-      width="300"
-      height="300"
-      className={isThinking ? "animate-[wiggle_0.6s_ease-in-out_infinite]" : ""}
-      style={{ filter: "drop-shadow(0 18px 30px rgba(0,0,0,0.45))" }}
+      viewBox="0 0 240 260"
+      className={
+        "h-full w-full " +
+        (isThinking ? "animate-[wiggle_0.6s_ease-in-out_infinite]" : "")
+      }
+      style={{ filter: "drop-shadow(0 22px 32px rgba(0,0,0,0.5))" }}
     >
       <defs>
-        <radialGradient id="headGradient" cx="50%" cy="40%" r="65%">
-          <stop offset="0%" stopColor="#7a4d2c" />
-          <stop offset="100%" stopColor="#3d2818" />
+        <radialGradient id="headFur" cx="50%" cy="38%" r="65%">
+          <stop offset="0%" stopColor="#8b5a35" />
+          <stop offset="55%" stopColor="#5a3a22" />
+          <stop offset="100%" stopColor="#2a1a0d" />
         </radialGradient>
-        <radialGradient id="faceGradient" cx="50%" cy="50%" r="60%">
-          <stop offset="0%" stopColor="#f7dab4" />
-          <stop offset="100%" stopColor="#d6a878" />
+        <radialGradient id="bodyFur" cx="50%" cy="40%" r="70%">
+          <stop offset="0%" stopColor="#6b4226" />
+          <stop offset="100%" stopColor="#2a1a0d" />
         </radialGradient>
+        <radialGradient id="faceSkin" cx="50%" cy="55%" r="60%">
+          <stop offset="0%" stopColor="#fbdfba" />
+          <stop offset="100%" stopColor="#c89868" />
+        </radialGradient>
+        <radialGradient id="bellySkin" cx="50%" cy="50%" r="60%">
+          <stop offset="0%" stopColor="#e8c190" />
+          <stop offset="100%" stopColor="#a87a4a" />
+        </radialGradient>
+        <linearGradient id="bananaPeel" x1="0" x2="0" y1="0" y2="1">
+          <stop offset="0%" stopColor="#ffe27a" />
+          <stop offset="60%" stopColor="#f5d35a" />
+          <stop offset="100%" stopColor="#b8901a" />
+        </linearGradient>
       </defs>
 
+      {/* Tail */}
+      <path
+        d="M 195 175 Q 230 165 225 130 Q 220 100 195 105"
+        stroke="url(#bodyFur)"
+        strokeWidth="13"
+        fill="none"
+        strokeLinecap="round"
+      />
+      <path
+        d="M 195 175 Q 228 167 222 132"
+        stroke="rgba(255,255,255,0.08)"
+        strokeWidth="3"
+        fill="none"
+        strokeLinecap="round"
+      />
+
+      {/* Body */}
+      <ellipse cx="120" cy="190" rx="56" ry="50" fill="url(#bodyFur)" />
+      <ellipse cx="120" cy="200" rx="34" ry="32" fill="url(#bellySkin)" />
+
+      {/* Legs */}
+      <ellipse cx="92" cy="235" rx="16" ry="14" fill="url(#bodyFur)" />
+      <ellipse cx="148" cy="235" rx="16" ry="14" fill="url(#bodyFur)" />
+      <ellipse cx="92" cy="240" rx="11" ry="7" fill="#a87a4a" />
+      <ellipse cx="148" cy="240" rx="11" ry="7" fill="#a87a4a" />
+
+      {/* Left arm holding a banana */}
+      <path
+        d="M 78 175 Q 50 175 42 150 Q 38 132 52 122"
+        stroke="url(#bodyFur)"
+        strokeWidth="20"
+        fill="none"
+        strokeLinecap="round"
+      />
+      {/* Banana */}
+      <g transform="translate(28 100) rotate(-18)">
+        <path
+          d="M2 18 Q 6 50 44 56 Q 52 56 52 49 Q 52 46 48 45 Q 18 40 12 14 Q 11 8 6 8 Q 0 8 2 18 Z"
+          fill="url(#bananaPeel)"
+          stroke="#7a5d10"
+          strokeWidth="1.5"
+        />
+        <path
+          d="M6 16 Q 14 42 42 50"
+          stroke="rgba(0,0,0,0.18)"
+          strokeWidth="1.2"
+          fill="none"
+        />
+        <ellipse cx="6" cy="9" rx="3" ry="2.5" fill="#3d2818" />
+      </g>
+
+      {/* Right arm */}
+      <path
+        d="M 160 175 Q 190 180 195 200"
+        stroke="url(#bodyFur)"
+        strokeWidth="20"
+        fill="none"
+        strokeLinecap="round"
+      />
+      <circle cx="197" cy="205" r="11" fill="#a87a4a" />
+
+      {/* Neck shadow */}
+      <ellipse cx="120" cy="145" rx="28" ry="10" fill="#1a0e05" opacity="0.45" />
+
       {/* Ears */}
-      <circle cx="38" cy="78" r="22" fill="#3d2818" />
-      <circle cx="38" cy="78" r="13" fill="#d6a878" />
-      <circle cx="162" cy="78" r="22" fill="#3d2818" />
-      <circle cx="162" cy="78" r="13" fill="#d6a878" />
+      <circle cx="56" cy="92" r="20" fill="#3d2818" />
+      <circle cx="56" cy="92" r="11" fill="#d8a878" />
+      <circle cx="184" cy="92" r="20" fill="#3d2818" />
+      <circle cx="184" cy="92" r="11" fill="#d8a878" />
 
       {/* Head */}
-      <ellipse cx="100" cy="105" rx="64" ry="60" fill="url(#headGradient)" />
+      <ellipse cx="120" cy="110" rx="68" ry="62" fill="url(#headFur)" />
 
-      {/* Face area */}
-      <ellipse cx="100" cy="125" rx="46" ry="42" fill="url(#faceGradient)" />
+      {/* Top tuft */}
+      <path
+        d="M 96 56 Q 105 42 115 55 Q 122 40 130 56 Q 140 42 148 60"
+        stroke="#2a1a0d"
+        strokeWidth="6"
+        fill="none"
+        strokeLinecap="round"
+      />
 
-      {/* Eye sockets shadow */}
-      <ellipse cx="80" cy="98" rx="17" ry="16" fill="#2a1a0d" opacity="0.25" />
-      <ellipse cx="120" cy="98" rx="17" ry="16" fill="#2a1a0d" opacity="0.25" />
+      {/* Face skin (peanut shape) */}
+      <path
+        d="M 78 120 Q 70 100 100 92 Q 120 88 140 92 Q 170 100 162 120 Q 170 150 140 162 Q 120 168 100 162 Q 70 150 78 120 Z"
+        fill="url(#faceSkin)"
+      />
+
+      {/* Eye sockets */}
+      <ellipse cx="100" cy="108" rx="16" ry="15" fill="#2a1a0d" opacity="0.22" />
+      <ellipse cx="140" cy="108" rx="16" ry="15" fill="#2a1a0d" opacity="0.22" />
 
       {/* Eye whites */}
-      <circle ref={leftEyeRef} cx="80" cy="98" r="14" fill="#ffffff" />
-      <circle ref={rightEyeRef} cx="120" cy="98" r="14" fill="#ffffff" />
+      <circle ref={leftEyeRef} cx="100" cy="108" r="13" fill="#ffffff" />
+      <circle ref={rightEyeRef} cx="140" cy="108" r="13" fill="#ffffff" />
 
-      {/* Pupils — these translate to follow the cursor */}
+      {/* Pupils */}
       <circle
         ref={leftPupilRef}
-        cx="80"
-        cy="98"
-        r="6.5"
+        cx="100"
+        cy="108"
+        r="6"
         fill="#1a1a1a"
         style={{ transition: "transform 120ms ease-out" }}
       />
       <circle
         ref={rightPupilRef}
-        cx="120"
-        cy="98"
-        r="6.5"
+        cx="140"
+        cy="108"
+        r="6"
         fill="#1a1a1a"
         style={{ transition: "transform 120ms ease-out" }}
       />
+      <circle cx="102" cy="105" r="2" fill="#ffffff" pointerEvents="none" />
+      <circle cx="142" cy="105" r="2" fill="#ffffff" pointerEvents="none" />
 
-      {/* Eye highlights — sit slightly off-center for life */}
-      <circle cx="83" cy="95" r="2" fill="#ffffff" pointerEvents="none" />
-      <circle cx="123" cy="95" r="2" fill="#ffffff" pointerEvents="none" />
+      {/* Brows */}
+      <path
+        d={
+          isThinking
+            ? "M 88 90 Q 100 84 112 92"
+            : "M 88 92 Q 100 88 112 94"
+        }
+        stroke="#2a1a0d"
+        strokeWidth="3.5"
+        fill="none"
+        strokeLinecap="round"
+      />
+      <path
+        d={
+          isThinking
+            ? "M 128 92 Q 140 84 152 90"
+            : "M 128 94 Q 140 88 152 92"
+        }
+        stroke="#2a1a0d"
+        strokeWidth="3.5"
+        fill="none"
+        strokeLinecap="round"
+      />
 
       {/* Nostrils */}
-      <ellipse cx="93" cy="132" rx="2" ry="3" fill="#3d2818" />
-      <ellipse cx="107" cy="132" rx="2" ry="3" fill="#3d2818" />
+      <ellipse cx="113" cy="138" rx="2.2" ry="3" fill="#3d2818" />
+      <ellipse cx="127" cy="138" rx="2.2" ry="3" fill="#3d2818" />
 
       {/* Mouth */}
       <path
         d={
           isThinking
-            ? "M 86 148 Q 100 145 114 148"
-            : "M 84 146 Q 100 160 116 146"
+            ? "M 106 154 Q 120 151 134 154"
+            : "M 104 150 Q 120 165 136 150"
         }
         stroke="#3d2818"
         strokeWidth="3"
         fill="none"
         strokeLinecap="round"
       />
+
+      {/* Subtle cheek blush */}
+      <circle cx="86" cy="135" r="6" fill="#e89b7a" opacity="0.5" />
+      <circle cx="154" cy="135" r="6" fill="#e89b7a" opacity="0.5" />
     </svg>
   );
 }
