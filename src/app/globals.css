@@ -100,17 +100,26 @@ body::before {
 
 .digit-67.d6 {
   left: 6%;
-  top: 28%;
-  font-size: clamp(48px, 9vw, 96px);
+  top: 18%;
+  font-size: clamp(40px, 7vw, 72px);
   animation: pop6 1s ease-out infinite;
+  z-index: 2;
 }
 
 .digit-67.d7 {
   right: 6%;
-  top: 28%;
-  font-size: clamp(48px, 9vw, 96px);
+  top: 18%;
+  font-size: clamp(40px, 7vw, 72px);
   animation: pop7 1s ease-out infinite;
   animation-delay: 0.5s;
+  z-index: 2;
+}
+
+.monkey-stage,
+.monkey-stage *,
+.monkey-stage svg,
+.monkey-stage svg * {
+  overflow: visible !important;
 }
 
 .digit-67.paused {

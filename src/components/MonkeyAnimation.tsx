@@ -96,7 +96,7 @@ function apply67Gesture(input: unknown): LottieData {
   type AnimKs = { p?: { s?: boolean; x?: unknown; y?: unknown }; r?: unknown };
   const armRKs = armR?.ks as AnimKs | undefined;
   if (armRKs?.p?.s) {
-    armRKs.p.x = staticX(348.695);
+    armRKs.p.x = staticX(260);
     armRKs.p.y = bouncyY(110.597, 110, false);
     armRKs.r = {
       a: 1,
@@ -112,7 +112,7 @@ function apply67Gesture(input: unknown): LottieData {
   }
   const armLKs = armL?.ks as AnimKs | undefined;
   if (armLKs?.p?.s) {
-    armLKs.p.x = staticX(-344.793);
+    armLKs.p.x = staticX(-260);
     armLKs.p.y = bouncyY(110.687, 110, true);
     armLKs.r = {
       a: 1,
@@ -127,6 +127,9 @@ function apply67Gesture(input: unknown): LottieData {
     };
   }
 
+  if (nullAll?.ks) {
+    (nullAll.ks as Record<string, unknown>).s = { a: 0, k: [70, 70, 100], ix: 6, l: 2 };
+  }
   const nullAllKs = nullAll?.ks as AnimKs | undefined;
   if (nullAllKs?.p?.s) {
     nullAllKs.p.y = {
@@ -246,7 +249,7 @@ export function MonkeyAnimation({ status }: MonkeyAnimationProps) {
 
   return (
     <div
-      className="relative mx-auto flex aspect-square w-full max-w-[420px] items-center justify-center [&_svg]:!overflow-visible"
+      className="monkey-stage relative mx-auto flex aspect-square w-full max-w-[420px] items-center justify-center overflow-visible"
       aria-label="Macaco"
     >
       <div
@@ -259,7 +262,7 @@ export function MonkeyAnimation({ status }: MonkeyAnimationProps) {
           animationData={animationData}
           loop
           autoplay
-          style={{ width: "100%", height: "100%" }}
+          style={{ width: "100%", height: "100%", overflow: "visible" }}
         />
       ) : null}
       <span
