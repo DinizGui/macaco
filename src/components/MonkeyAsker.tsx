@@ -29,7 +29,7 @@ export function MonkeyAsker() {
 
   return (
     <section className="flex w-full max-w-3xl flex-col items-center gap-8">
-      <MonkeyAnimation isThinking={status === "thinking"} />
+      <MonkeyAnimation status={status} />
 
       <AnimatePresence mode="wait">
         {status === "decided" && resultado ? (
