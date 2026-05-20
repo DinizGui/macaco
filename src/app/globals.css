@@ -71,6 +71,53 @@ body::before {
   to { transform: rotate(360deg); }
 }
 
+@keyframes pop6 {
+  0%   { opacity: 0; transform: translate(0, 20px) rotate(-12deg) scale(0.6); }
+  15%  { opacity: 1; transform: translate(0, -10px) rotate(-8deg) scale(1.05); }
+  60%  { opacity: 0.9; transform: translate(0, -40px) rotate(-6deg) scale(1); }
+  100% { opacity: 0; transform: translate(0, -90px) rotate(-4deg) scale(0.85); }
+}
+
+@keyframes pop7 {
+  0%   { opacity: 0; transform: translate(0, 20px) rotate(12deg) scale(0.6); }
+  15%  { opacity: 1; transform: translate(0, -10px) rotate(8deg) scale(1.05); }
+  60%  { opacity: 0.9; transform: translate(0, -40px) rotate(6deg) scale(1); }
+  100% { opacity: 0; transform: translate(0, -90px) rotate(4deg) scale(0.85); }
+}
+
+.digit-67 {
+  position: absolute;
+  font-family: "Space Grotesk", "Helvetica Neue", sans-serif;
+  font-weight: 800;
+  color: var(--color-banana-400);
+  line-height: 1;
+  letter-spacing: -0.04em;
+  opacity: 0;
+  text-shadow: 0 4px 20px rgba(245, 211, 90, 0.4);
+  will-change: transform, opacity;
+  pointer-events: none;
+}
+
+.digit-67.d6 {
+  left: 6%;
+  top: 28%;
+  font-size: clamp(48px, 9vw, 96px);
+  animation: pop6 1s ease-out infinite;
+}
+
+.digit-67.d7 {
+  right: 6%;
+  top: 28%;
+  font-size: clamp(48px, 9vw, 96px);
+  animation: pop7 1s ease-out infinite;
+  animation-delay: 0.5s;
+}
+
+.digit-67.paused {
+  animation-play-state: paused;
+  opacity: 0;
+}
+
 .banana-text {
   background: linear-gradient(180deg, #ffe27a 0%, #f5d35a 50%, #b8901a 100%);
   -webkit-background-clip: text;

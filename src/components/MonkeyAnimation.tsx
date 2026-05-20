@@ -246,7 +246,7 @@ export function MonkeyAnimation({ status }: MonkeyAnimationProps) {
 
   return (
     <div
-      className="relative mx-auto flex aspect-square w-full max-w-[320px] items-center justify-center"
+      className="relative mx-auto flex aspect-square w-full max-w-[420px] items-center justify-center [&_svg]:!overflow-visible"
       aria-label="Macaco"
     >
       <div
@@ -262,6 +262,18 @@ export function MonkeyAnimation({ status }: MonkeyAnimationProps) {
           style={{ width: "100%", height: "100%" }}
         />
       ) : null}
+      <span
+        className={`digit-67 d6${status === "decided" ? " paused" : ""}`}
+        aria-hidden
+      >
+        6
+      </span>
+      <span
+        className={`digit-67 d7${status === "decided" ? " paused" : ""}`}
+        aria-hidden
+      >
+        7
+      </span>
     </div>
   );
 }
